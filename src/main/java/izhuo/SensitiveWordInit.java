@@ -21,6 +21,7 @@ import java.util.Set;
 public class SensitiveWordInit {
     public static int CABIN = 1;
     public static int PORT = 2;
+    public static int SEATS = 3;
 
     private String ENCODING = "UTF-8";    //字符编码
     @SuppressWarnings("rawtypes")
@@ -133,6 +134,9 @@ public class SensitiveWordInit {
         }
         else if(types==PORT){
             path = SensitiveWordInit.class.getClassLoader().getResource("port.txt").getPath();
+        }
+        else if(types==SEATS){
+            path = SensitiveWordInit.class.getClassLoader().getResource("seats.txt").getPath();
         }
         File file = new File(path);    //读取文件
         InputStreamReader read = new InputStreamReader(new FileInputStream(file), ENCODING);

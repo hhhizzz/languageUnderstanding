@@ -1,6 +1,6 @@
 ## 简单的语义解析
 
-现在只有航班和旅店信息解析：
+现在可以航班、旅店和火车票信息解析：
 
 航班样例(在`FlightDataTest`类中：
 
@@ -54,6 +54,23 @@ System.out.println("位置："+dataItem.getLocation());
 开始时间：Thu Jul 27 00:00:00 CST 2017
 结束时间：Sat Jul 29 00:00:00 CST 2017
 位置：郑州市西大街二七广场
+```
+火车票样例(在`TrainDataTest`中):
+```Java
+//测试时间为2017-07-25
+TrainData.TrainDataItem dataItem = new TrainData().getDataItem("预订一张从南京到兰州的硬卧，明天中午12点到下午三点之间发车");
+System.out.println("出发城市："+dataItem.getCityFrom());
+System.out.println("到达城市："+dataItem.getCityTo());
+System.out.println("出发时间："+dataItem.getDates());
+System.out.println("座位类型："+dataItem.getSeatType());
+```
+
+结果为：
+```
+出发城市：南京
+到达城市：兰州
+出发时间：[Wed Jul 26 12:00:00 CST 2017, Wed Jul 26 15:00:00 CST 2017]
+座位类型：[硬卧]
 ```
 
 ## 参考资料和项目
