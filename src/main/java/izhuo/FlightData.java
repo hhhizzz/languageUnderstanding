@@ -65,7 +65,7 @@ public class FlightData {
         List<Double> prices = getPrice(sentence);
         if (prices.size() == 1) {
             dataItem.setPriceRight(prices.get(0));
-        } else if (dates.size() >= 2) {
+        } else if (prices.size() >= 2) {
             dataItem.setPriceLeft(prices.get(0));
             dataItem.setPriceRight(prices.get(1));
         }
@@ -74,7 +74,7 @@ public class FlightData {
     }
 
 
-    private List<String> getCity(String sentence) {
+    List<String> getCity(String sentence) {
         Segment segment = HanLP.newSegment().enablePlaceRecognize(true);
         List<Term> termList = segment.seg(sentence);
         List<String> words = termList.stream().map(Term::toString).collect(Collectors.toList());
@@ -91,7 +91,7 @@ public class FlightData {
         return results;
     }
 
-    private String getAirline(String sentence) {
+    String getAirline(String sentence) {
         Segment segment = HanLP.newSegment().enableOrganizationRecognize(true);
         List<Term> termList = segment.seg(sentence);
         List<String> words = termList.stream().map(Term::toString).collect(Collectors.toList());
@@ -106,7 +106,7 @@ public class FlightData {
         return null;
     }
 
-    private Double getRate(String sentence) {
+    Double getRate(String sentence) {
         Segment segment = HanLP.newSegment();
         List<Term> termList = segment.seg(sentence);
         List<String> words = termList.stream().map(Term::toString).collect(Collectors.toList());
@@ -124,7 +124,7 @@ public class FlightData {
         return null;
     }
 
-    private List<Date> getDate(String sentence) {
+    List<Date> getDate(String sentence) {
         URL url = TimeNormalizer.class.getClassLoader().getResource("TimeExp.m");
         TimeNormalizer normalizer = new TimeNormalizer(url.getPath());
         normalizer.setPreferFuture(true);
@@ -137,11 +137,11 @@ public class FlightData {
         return result;
     }
 
-    private List<Double> getPrice(String sentence) {
+    List<Double> getPrice(String sentence) {
         Segment segment = HanLP.newSegment();
         List<Term> termList = segment.seg(sentence);
         List<String> words = termList.stream().map(Term::toString).collect(Collectors.toList());
-        String pattern = "[0-9]*/m$";
+        String pattern = "\\d+/m$";
         Pattern r = Pattern.compile(pattern);
         List<Double> result = new ArrayList<>();
         for (String word : words) {
@@ -157,7 +157,7 @@ public class FlightData {
         return result;
     }
 
-    private String changeNum(String sentence) {
+    String changeNum(String sentence) {
         Segment segment = HanLP.newSegment();
         List<Term> termList = segment.seg(sentence);
         List<String> words = termList.stream().map(Term::toString).collect(Collectors.toList());

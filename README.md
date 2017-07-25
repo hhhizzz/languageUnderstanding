@@ -1,8 +1,8 @@
 ## 简单的语义解析
 
-现在只有航班信息解析：
+现在只有航班和旅店信息解析：
 
-样例(在`FlightDataTest`类中：
+航班样例(在`FlightDataTest`类中：
 
 ```Java
 //测试时间为2017-07-24
@@ -34,6 +34,26 @@ System.out.println("最高价格要求："+flightDataItem.getPriceRight());
 到达时间：Mon Jul 31 12:00:00 CST 2017
 最低价格要求：2000.0
 最高价格要求：3000.0
+```
+旅店样例(在`HotelDataTest`中)：
+```Java
+//测试时间为2017-07-25
+HotelData.HotelDataItem dataItem = new HotelData().getData("预订郑州市西大街二七广场附近的酒店两晚，后天入住，价格200-400");
+System.out.println("城市："+dataItem.getCity());
+System.out.println("价格最低："+dataItem.getPriceLeft());
+System.out.println("价格最高："+dataItem.getPriceRight());
+System.out.println("开始时间："+dataItem.getDateBegin());
+System.out.println("结束时间："+dataItem.getDateEnd());
+System.out.println("位置："+dataItem.getLocation());
+```
+结果为：
+```
+城市：郑州市
+价格最低：200.0
+价格最高：400.0
+开始时间：Thu Jul 27 00:00:00 CST 2017
+结束时间：Sat Jul 29 00:00:00 CST 2017
+位置：郑州市西大街二七广场
 ```
 
 ## 参考资料和项目
