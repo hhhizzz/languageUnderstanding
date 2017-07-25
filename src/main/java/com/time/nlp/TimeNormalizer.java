@@ -16,6 +16,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -118,7 +119,8 @@ public class TimeNormalizer implements Serializable {
      */
     public TimeUnit[] parse(String target) {
         this.target = target;
-        this.timeBase = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(Calendar.getInstance().getTime());// TODO
+//        this.timeBase = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(Calendar.getInstance().getTime());// TODO
+        this.timeBase = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(1492444800000L));
         // Calendar.getInstance().getTime()换成new
         // Date？
         this.oldTimeBase = timeBase;
