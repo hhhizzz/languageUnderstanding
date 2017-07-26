@@ -20,5 +20,10 @@ public class FindDataTest {
         HotelData.HotelDataItem dataItem = new HotelData().getData("预订郑州西大街二七广场附近的酒店两晚，后天入住，价格200-400");
         System.out.println(FindData.findDataHotel(dataItem));
     }
+    @Test
+    public void findDataTrain() throws Exception {
+        TrainData.TrainDataItem dataItem = new TrainData().getDataItem("预订一个明天或者后天从长春出发到杭州的火车硬卧");
+        System.out.println(FindData.findDataTrain(dataItem));
+    }
 
 }

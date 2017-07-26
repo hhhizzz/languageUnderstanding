@@ -242,4 +242,85 @@ public class FindData {
         ResultSet rs = stmt.executeQuery(mainSQL);
         return getJSONFromResultSet(rs, "data");
     }
+
+    public static String findDataTrain(TrainData.TrainDataItem dataItem) throws Exception {
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
+        String cityFrom = dataItem.getCityFrom();
+        String cityTo = dataItem.getCityTo();
+        List<Date> dates = dataItem.getDates();
+        List<String> seatType = dataItem.getSeatType();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Segment segment = HanLP.newSegment();
+
+        boolean and = false;
+
+        String mainSQL = "SELECT * FROM train WHERE ";
+        if (cityFrom != null) {
+            mainSQL += String.format("originStation LIKE \'%s\' ", "%" + cityFrom + "%");
+            and = true;
+        }
+        if (cityTo != null) {
+            if (and) {
+                mainSQL += String.format("AND terminalStation LIKE \'%s\' ", "%" + cityTo + "%");
+            } else {
+                mainSQL += String.format("terminalStation LIKE \'%s\' ", "%" + cityTo + "%");
+            }
+        }
+        if (dates.size() == 2) {
+            if (and) {
+                mainSQL += String.format("AND startTime >= \'%s\' ", format.format(dates.get(0)));
+                mainSQL += String.format("AND startTime <= \'%s\' ", format.format(dates.get(1)));
+            } else {
+                mainSQL += String.format("startTime >= \'%s\' ", format.format(dates.get(0)));
+                mainSQL += String.format("AND startTime <= \'%s\' ", format.format(dates.get(1)));
+            }
+        }
+        if (seatType.size() >= 1) {
+            if (and) {
+                for (String seat : seatType) {
+                    mainSQL += String.format("AND %s != -1 ", seat);
+                }
+            } else {
+                for (int i = 0; i < seatType.size(); i++) {
+                    if (i == 0) {
+                        mainSQL += String.format("%s != -1 ", seatType.get(i));
+                    } else {
+                        mainSQL += String.format("AND %s != -1 ", seatType.get(i));
+                    }
+                }
+            }
+        }
+        Connection conn = DriverManager.getConnection(databaseURL, username, password);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(mainSQL);
+
+        Map json = new HashMap();
+        List list = new ArrayList();
+        while (rs.next()) {
+            Map<String, String> tempMap = new HashMap<>();
+            tempMap.put("terminalStation", rs.getString("terminalStation"));
+            tempMap.put("originStation", rs.getString("originStation"));
+            tempMap.put("trainNo", rs.getString("trainNo"));
+            tempMap.put("trainType", rs.getString("trainType"));
+            tempMap.put("startTime", format.format(rs.getDate("startTime")));
+            tempMap.put("arriveTime", format.format(rs.getDate("arriveTime")));
+            list.add(tempMap);
+            List<Map<String, Object>> seatList = new ArrayList<>();
+            Map<String, List<Map<String, Object>>> priceMap = new HashMap<>();
+            for (int i = 0; i < seatType.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("name", seatType.get(i));
+                map.put("value", rs.getInt(seatType.get(i)));
+                seatList.add(map);
+            }
+            priceMap.put("price", seatList);
+            list.add(priceMap);
+        }
+
+
+        json.put("data", list);
+        return JSONValue.toJSONString(json);
+    }
 }

@@ -95,6 +95,15 @@ System.out.println(FindData.findDataHotel(dataItem));
 ```Json
 {"data":[{"address":"管城回族区西大街198号(近二七广场,地铁1号线二七广场站D出口东700米)","city":"郑州","price":"399","name":"河南瑞贝卡大酒店"}]}
 ```
+查询火车
+```Java
+TrainData.TrainDataItem dataItem = new TrainData().getDataItem("预订一个明天或者后天从长春出发到杭州的火车硬卧");
+System.out.println(FindData.findDataTrain(dataItem));
+```
+返回结果
+```Json
+{"data":[{"arriveTime":"2017-04-20 13:00:00","originStation":"长春","trainType":"","trainNo":"Z178","startTime":"2017-04-19 13:00:00","terminalStation":"杭州"},{"price":[{"name":"硬卧","value":501}]},{"arriveTime":"2017-04-21 13:00:00","originStation":"长春","trainType":"","trainNo":"K75","startTime":"2017-04-19 13:00:00","terminalStation":"杭州东"},{"price":[{"name":"硬卧","value":541}]},{"arriveTime":"2017-04-21 13:00:00","originStation":"长春","trainType":"","trainNo":"K554","startTime":"2017-04-19 13:00:00","terminalStation":"杭州"},{"price":[{"name":"硬卧","value":491}]}]}
+```
 
 ## 参考资料和项目
 
