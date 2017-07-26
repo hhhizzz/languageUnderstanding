@@ -45,7 +45,9 @@ public class HotelData {
         dataItem.setCity(citys.get(0));
 
         //处理地址部分
-        dataItem.setLocation(getAddress(sentence));
+        String location = getAddress(sentence);
+        location = location.replaceAll(citys.get(0),"");
+        dataItem.setLocation(location);
 
         return dataItem;
     }

@@ -72,10 +72,12 @@ System.out.println("座位类型："+dataItem.getSeatType());
 出发时间：[Wed Apr 19 12:00:00 CST 2017, Wed Apr 19 15:00:00 CST 2017]
 座位类型：[硬卧]
 ```
-## 添加查询数据库的功能
-现只有机票查询
+## 查询数据库的功能
+目前现只有机票和酒店查询
 可以从`dump.sql.zip`获取mysql数据
+在`FindDataTest`设置数据库url
 样例在`FindDataTest`中：
+查询飞机票
 ```Java
 FlightData.FlightDataItem dataItem = new FlightData().getData("预订一个下周三上午8点到12点之间从北京到上海的头等舱或公务舱航班，要南方航空的，价格8折以内,一千到三千元");
 System.out.println(FindData.findDataFlight(dataItem));
@@ -84,7 +86,15 @@ System.out.println(FindData.findDataFlight(dataItem));
 ```Json
 {"data":[{"flight":"CZ3907","dPort":"首都国际机场","quantity":"3","departCity":"北京","standardPrice":"3470.0","arriveCity":"上海","arriveTime":"2017-04-26 10:30:00","takeOffTime":"2017-04-26 08:20:00","rate":"0.0","price":"1670","airline":"中国南方航空股份有限公司","aPort":"虹桥国际机场","cabinInfo":"公务舱"},{"flight":"CZ3907","dPort":"首都国际机场","quantity":"3","departCity":"北京","standardPrice":"3470.0","arriveCity":"上海","arriveTime":"2017-04-26 10:30:00","takeOffTime":"2017-04-26 08:20:00","rate":"0.0","price":"1740","airline":"中国南方航空股份有限公司","aPort":"虹桥国际机场","cabinInfo":"公务舱"},{"flight":"CZ3907","dPort":"首都国际机场","quantity":"5","departCity":"北京","standardPrice":"3470.0","arriveCity":"上海","arriveTime":"2017-04-26 10:30:00","takeOffTime":"2017-04-26 08:20:00","rate":"0.0","price":"2850","airline":"中国南方航空股份有限公司","aPort":"虹桥国际机场","cabinInfo":"公务舱"}]}
 ```
-
+查询酒店：
+```Java
+HotelData.HotelDataItem dataItem = new HotelData().getData("预订郑州西大街二七广场附近的酒店两晚，后天入住，价格200-400");
+System.out.println(FindData.findDataHotel(dataItem));
+```
+返回结果
+```Json
+{"data":[{"address":"管城回族区西大街198号(近二七广场,地铁1号线二七广场站D出口东700米)","city":"郑州","price":"399","name":"河南瑞贝卡大酒店"}]}
+```
 
 ## 参考资料和项目
 
