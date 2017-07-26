@@ -3,17 +3,25 @@ package izhuo;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.seg.Segment;
 import com.hankcs.hanlp.seg.common.Term;
+import org.json.JSONArray;
+import org.json.simple.JSONValue;
 
+import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Created by xunixhuang on 25/07/2017.
  */
 public class FindData {
-    public static String findDataFlight(FlightData.FlightDataItem dataItem) {
+    public static String username="root";
+    public static String password="123456";
+
+    public static String findDataFlight(FlightData.FlightDataItem dataItem) throws ClassNotFoundException, IllegalAccessException, InstantiationException, SQLException {
+
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
         String portFrom = dataItem.getPortFrom();
         String portTo = dataItem.getPortTo();
         String airline = dataItem.getAirLine();
@@ -159,6 +167,36 @@ public class FindData {
             mainSQL += String.format("price >= %f ", priceLeft);
             mainSQL += String.format("price <= %f ", priceRight);
         }
-        return mainSQL;
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/flight?useUnicode=true&characterEncoding=utf-8 ", username, password);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(mainSQL);
+
+        return getJSONFromResultSet(rs,"data");
+    }
+    private static String getJSONFromResultSet(ResultSet rs,String keyName) {
+        Map json = new HashMap();
+        List list = new ArrayList();
+        if(rs!=null)
+        {
+            try {
+                ResultSetMetaData metaData = rs.getMetaData();
+                while(rs.next())
+                {
+                    Map<String,Object> columnMap = new HashMap<String, Object>();
+                    for(int columnIndex=1;columnIndex<=metaData.getColumnCount();columnIndex++)
+                    {
+                        if(rs.getString(metaData.getColumnName(columnIndex))!=null)
+                            columnMap.put(metaData.getColumnLabel(columnIndex),     rs.getString(metaData.getColumnName(columnIndex)));
+                        else
+                            columnMap.put(metaData.getColumnLabel(columnIndex), "");
+                    }
+                    list.add(columnMap);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            json.put(keyName, list);
+        }
+        return JSONValue.toJSONString(json);
     }
 }

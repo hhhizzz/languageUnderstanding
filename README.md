@@ -1,6 +1,7 @@
 ## 简单的语义解析
 
 现在可以航班、旅店和火车票信息解析：
+设置默认今天为`2017-04-18`
 
 航班样例(在`FlightDataTest`类中：
 
@@ -30,14 +31,13 @@ System.out.println("最高价格要求："+flightDataItem.getPriceRight());
 出发机场：首都国际机场
 到达机场：虹桥机场
 要求折扣：8.0
-出发时间：Mon Jul 31 08:00:00 CST 2017
-到达时间：Mon Jul 31 12:00:00 CST 2017
+出发时间：Mon Apr 24 08:00:00 CST 2017
+到达时间：Mon Apr 24 12:00:00 CST 2017
 最低价格要求：2000.0
 最高价格要求：3000.0
 ```
 旅店样例(在`HotelDataTest`中)：
 ```Java
-//测试时间为2017-07-25
 HotelData.HotelDataItem dataItem = new HotelData().getData("预订郑州市西大街二七广场附近的酒店两晚，后天入住，价格200-400");
 System.out.println("城市："+dataItem.getCity());
 System.out.println("价格最低："+dataItem.getPriceLeft());
@@ -51,8 +51,8 @@ System.out.println("位置："+dataItem.getLocation());
 城市：郑州市
 价格最低：200.0
 价格最高：400.0
-开始时间：Thu Jul 27 00:00:00 CST 2017
-结束时间：Sat Jul 29 00:00:00 CST 2017
+开始时间：Thu Apr 20 00:00:00 CST 2017
+结束时间：Sat Apr 22 00:00:00 CST 2017
 位置：郑州市西大街二七广场
 ```
 火车票样例(在`TrainDataTest`中):
@@ -69,9 +69,22 @@ System.out.println("座位类型："+dataItem.getSeatType());
 ```
 出发城市：南京
 到达城市：兰州
-出发时间：[Wed Jul 26 12:00:00 CST 2017, Wed Jul 26 15:00:00 CST 2017]
+出发时间：[Wed Apr 19 12:00:00 CST 2017, Wed Apr 19 15:00:00 CST 2017]
 座位类型：[硬卧]
 ```
+## 添加查询数据库的功能
+现只有机票查询
+可以从`dump.sql.zip`获取mysql数据
+样例在`FindDataTest`中：
+```Java
+FlightData.FlightDataItem dataItem = new FlightData().getData("预订一个下周三上午8点到12点之间从北京到上海的头等舱或公务舱航班，要南方航空的，价格8折以内,一千到三千元");
+System.out.println(FindData.findDataFlight(dataItem));
+```
+返回结果
+```Json
+{"data":[{"flight":"CZ3907","dPort":"首都国际机场","quantity":"3","departCity":"北京","standardPrice":"3470.0","arriveCity":"上海","arriveTime":"2017-04-26 10:30:00","takeOffTime":"2017-04-26 08:20:00","rate":"0.0","price":"1670","airline":"中国南方航空股份有限公司","aPort":"虹桥国际机场","cabinInfo":"公务舱"},{"flight":"CZ3907","dPort":"首都国际机场","quantity":"3","departCity":"北京","standardPrice":"3470.0","arriveCity":"上海","arriveTime":"2017-04-26 10:30:00","takeOffTime":"2017-04-26 08:20:00","rate":"0.0","price":"1740","airline":"中国南方航空股份有限公司","aPort":"虹桥国际机场","cabinInfo":"公务舱"},{"flight":"CZ3907","dPort":"首都国际机场","quantity":"5","departCity":"北京","standardPrice":"3470.0","arriveCity":"上海","arriveTime":"2017-04-26 10:30:00","takeOffTime":"2017-04-26 08:20:00","rate":"0.0","price":"2850","airline":"中国南方航空股份有限公司","aPort":"虹桥国际机场","cabinInfo":"公务舱"}]}
+```
+
 
 ## 参考资料和项目
 
@@ -80,4 +93,6 @@ System.out.println("座位类型："+dataItem.getSeatType());
 [Time-NLP](https://github.com/shinyke/Time-NLP)
 
 [Java实现敏感词过滤](http://cmsblogs.com/?p=1031)
+
+[Create json Object by java from data of mysql](https://stackoverflow.com/questions/17160351/create-json-object-by-java-from-data-of-mysql)
 
